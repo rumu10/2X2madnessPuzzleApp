@@ -1,5 +1,15 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
+  margin: 150px;
+}
+
+.config{
+  margin: 10px;
+  width: 80px
+}
+
+.rotate{
+   width: 300px;
 }
 
 .App-logo {
