@@ -8,9 +8,8 @@ export default function processClick(model, canvas, x, y) {
         let diagX = x-30;
         let diagY = y-30;
 
-        if (diagX >= square.row*60  && diagX <= square.row*60 +60) {
-            if(diagY >= square.column*60  && diagY <= square.column*60 +60){
-                console.log(diagX,y,square.row,square.row*60+60, square); 
+        if (diagX >= square?.column * 60 && diagX <= square?.column * 60 + 60) {
+            if (diagY >= square?.row * 60 && diagY <= square?.row * 60 + 60) {
                 sqArr.push(square)
             }
           }
@@ -18,35 +17,30 @@ export default function processClick(model, canvas, x, y) {
           //Top right
            diagX = x+30;
             diagY = y-30;
-          if (diagX >= square.row*60  && diagX <= square.row*60 +60) {
-            if(diagY >= square.column*60  && diagY <= square.column*60 +60){
-                console.log(diagX,y,square.row,square.row*60+60, square);
-                sqArr.push(square) 
+        if (diagX >= square?.column * 60 && diagX <= square?.column * 60 + 60) {
+            if (diagY >= square?.row * 60 && diagY <= square?.row * 60 + 60) {
+                sqArr.push(square)
             }
-          }
-
+        }
           //bottom right
           diagX = x+30;
           diagY = y+30;
-          if (diagX >= square.row*60  && diagX <= square.row*60 +60) {
-            if(diagY >= square.column*60  && diagY <= square.column*60 +60){
-                console.log(diagX,y,square.row,square.row*60+60, square);
-                sqArr.push(square) 
+        if (diagX >= square?.column * 60 && diagX <= square?.column * 60 + 60) {
+            if (diagY >= square?.row * 60 && diagY <= square?.row * 60 + 60) {
+                sqArr.push(square)
             }
           }
 
            //bottom left
            diagX = x-30;
            diagY = y+30;
-          if (diagX >= square.row*60  && diagX <= square.row*60 +60) {
-            if(diagY >= square.column*60  && diagY <= square.column*60 +60){
-                console.log(diagX,y,square.row,square.row*60+60, square);
-                sqArr.push(square) 
+        if (diagX >= square?.column * 60 && diagX <= square?.column * 60 + 60) {
+            if (diagY >= square?.row * 60 && diagY <= square?.row * 60 + 60) {
+                sqArr.push(square)
             }
           }
     }
 
-    console.log(model);
     model.board.selectedGroup = sqArr;
     
 }

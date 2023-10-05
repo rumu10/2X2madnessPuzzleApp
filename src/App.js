@@ -1,11 +1,10 @@
 import React from 'react';
 import './App.css';
 import processClick from './controller/Controller.js';
-import resetHandler from './controller/ResetController.js';
 import redrawCanvas from './boundary/BoundaryClass';
 import Model from './model/ModelInfo';
-import { Col, Divider, Row } from 'antd';
-import configChaneHandler from './controller/ConfigController';
+import { Col, Row } from 'antd';
+import rotateHandler from './controller/RotateController';
 
 function App() {
   const [model, setModel] = React.useState(new Model())
@@ -26,22 +25,37 @@ function App() {
     let x = e.clientX - canvasRect.left
     let y = e.clientY - canvasRect.top
 
-    processClick(model, canvasRef.current, x, y)
+    const firstValue = model.board.squares[0]['color'];
+
+    const result = model.board.squares.every(item => item['color'] === firstValue);
+
+    if (!result) processClick(model, canvasRef.current, x, y)
+
     forceRedraw(redraw + 1)   // FORCE REDRAW
   }
 
   const rotateController = (direction) => {
-    configChaneHandler(model, canvasRef.current, 5)
-    forceRedraw(redraw + 1)   // FORCE REDRAW
+
+    const firstValue = model.board.squares[0]['color'];
+
+    const result = model.board.squares.every(item => item['color'] === firstValue);
+
+    if (!result) {
+      rotateHandler(model, canvasRef.current, direction);
+      model.moveCount = model.moveCount + 1;
+      // Check and remove groups
+      model.checkAndRemoveGroups(model.board);
+
+      forceRedraw(redraw + 1);
+    }
+
+    console.log(model.board.squares);
   }
 
-const configChaneHandler = (model, canvasObj, size) => {
-    model.currentConfig = size;
-    model.moveCount = model.moveCount + 1;
-
-    // model.resetConfig(size,cnt );
-    // console.log(model.moveCount)
-
+  const configChaneHandler = (model, canvasObj, size) => {
+    model.chooseConfig(size);
+    model.moveCount = 0;
+    forceRedraw(redraw + 1)
 }
 
 const  resetHandler = ()=> {
@@ -58,16 +72,17 @@ const  resetHandler = ()=> {
         <Col className="gutter-row" span={12}>
           <button className="reset_button" onClick={(e) => resetHandler(model, canvasRef.current)} >Reset</button>
           <canvas tabIndex="1"
+            data-testid="canvas"
             className="App-canvas"
             ref={canvasRef}
             width="600"
-            height="400"
+            height="500"
             onClick={handleClick}
           />
         </Col>
         <Col className="gutter-row" span={12}>
           <div style={{ display: 'flex' }}>
-            <button className="config" onClick={(e) => configChaneHandler(model, canvasRef.current, 0)} > 4x4</button>
+            <button className="config" data-testid="config" onClick={(e) => configChaneHandler(model, canvasRef.current, 0)} > 4x4</button>
             <button className="config" onClick={(e) => configChaneHandler(model, canvasRef.current, 1)} > 5x5</button>
             <button className="config" onClick={(e) => configChaneHandler(model, canvasRef.current, 2)} >6x6</button>
           </div>
@@ -76,11 +91,11 @@ const  resetHandler = ()=> {
           <br />
           <br />
           <div>
-            <button className="rotate" onClick={(e) => rotateController(true)} >ClockWise</button>
+            <button className="rotate"   data-testid="rotateCw" onClick={(e) => rotateController(true)} >ClockWise</button>
 
           </div>
           <br />
-          <button className="rotate" onClick={(e) => rotateController(false)}>CounterClockWise</button>
+          <button className="rotate" data-testid="rotateCcw" onClick={(e) => rotateController(false)}>CounterClockWise</button>
           <br />
           <br />
           <br />
@@ -89,9 +104,14 @@ const  resetHandler = ()=> {
           <div>
             Move Counter : {model.moveCount}
           </div>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <div style={{ color: 'green', fontSize: '20px', fontWeight: 'bold' }}>{model.victory ? "Congratulations! You solved the puzzle!!" : null}</div>
         </Col>
       </Row>
-
     </div>
   );
 }

@@ -7,11 +7,11 @@ export default function redrawCanvas(model, canvasObj, appObj) {
     // DRAW SQUARES....
 
     for (const square of model.board.squares) {
-        ctx.fillStyle = square.color;
-        ctx.fillRect(square.row * 60, square.column * 60, 60, 60);
-        ctx.strokeStyle = 'orange';
-        ctx.lineWidth = 5;
-        ctx.strokeRect(square.row * 60, square.column * 60, 60, 60);
+        ctx.fillStyle = square?.color;
+        ctx.fillRect(square?.column * 60, square?.row * 60, 60, 60);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2.8;
+        ctx.strokeRect(square?.column * 60, square?.row * 60, 60, 60);
     }
 
     // DRAW SELECTED GROUP (if any)
@@ -19,14 +19,13 @@ export default function redrawCanvas(model, canvasObj, appObj) {
     if (selectedGroup.length > 0) {
 
         for (const square of selectedGroup) {
-            ctx.fillStyle = square.color;
-            ctx.fillRect(square.row * 60, square.column * 60, 60, 60);
+            ctx.fillStyle = square?.color;
+            ctx.fillRect(square?.column * 60, square?.row * 60, 60, 60);
             ctx.strokeStyle = 'red';
             ctx.lineWidth = 5;
-            ctx.strokeRect(square.row * 60, square.column * 60, 60, 60);
+            ctx.strokeRect(square?.column * 60, square?.row * 60, 60, 60);
 
         }
-
 
     }
 
@@ -37,12 +36,29 @@ export default function redrawCanvas(model, canvasObj, appObj) {
 
             const centerX = col * 60 + 30;
             const centerY = row * 60 + 30;
-            const radius = 9;
+            const radius = 7;
+
+            let checkSelectedCircle;
+
+            if (selectedGroup.length > 0) { checkSelectedCircle = true; }
+            else { checkSelectedCircle = false }
+
+            for (const square of selectedGroup) {
+                if (!(square.row === row || square.row === row + 1))
+                    checkSelectedCircle = false;
+                if (!(square.column === col || square.column === col + 1))
+                    checkSelectedCircle = false;
+
+            }
 
             ctx.beginPath();
             ctx.arc(centerX + 30, centerY + 30, radius, 0, 2 * Math.PI, false);
-            ctx.fillStyle = 'white';
-            ctx.strokeStyle = 'orange';
+            if (checkSelectedCircle)
+                ctx.fillStyle = 'red';
+            else
+                ctx.fillStyle = 'white';
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 1;
             ctx.fill();
             ctx.stroke();
         }
