@@ -29,7 +29,9 @@ function App() {
 
     const result = model.board.squares.every(item => item['color'] === firstValue);
 
-    if (!result) processClick(model, canvasRef.current, x, y)
+    if (!result) processClick(model, canvasRef.current, x, y);
+
+    model.checkAndRemoveGroups(model.board);
 
     forceRedraw(redraw + 1)   // FORCE REDRAW
   }
@@ -44,7 +46,6 @@ function App() {
       rotateHandler(model, canvasRef.current, direction);
       model.moveCount = model.moveCount + 1;
       // Check and remove groups
-      model.checkAndRemoveGroups(model.board);
 
       forceRedraw(redraw + 1);
     }
@@ -76,7 +77,7 @@ const  resetHandler = ()=> {
             className="App-canvas"
             ref={canvasRef}
             width="600"
-            height="500"
+            height="450"
             onClick={handleClick}
           />
         </Col>
@@ -101,7 +102,7 @@ const  resetHandler = ()=> {
           <br />
           <br />
           <br />
-          <div>
+          <div data-testid="moveCount">
             Move Counter : {model.moveCount}
           </div>
           <br />
